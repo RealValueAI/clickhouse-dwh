@@ -39,11 +39,11 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PASSWORD }}
-        envs:
-          CLICKHOUSE_HTTP_PORT: "8123"
-          CLICKHOUSE_PORT: "9000"
-          CLICKHOUSE_USER: ${{ secrets.CLICKHOUSE_USER }}
-          CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
+        env: |
+          CLICKHOUSE_HTTP_PORT=8123
+          CLICKHOUSE_PORT=9000
+          CLICKHOUSE_USER=${{ secrets.CLICKHOUSE_USER }}
+          CLICKHOUSE_PASSWORD=${{ secrets.CLICKHOUSE_PASSWORD }}
         script: |
           cd ~/deploy
           docker pull sergandri/clickhouse-storage:latest
