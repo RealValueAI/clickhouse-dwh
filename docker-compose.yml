@@ -11,8 +11,8 @@ services:
       CLICKHOUSE_USER: "${CLICKHOUSE_USER:-default}"
       CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD:-password}"
     volumes:
-      - ./config/clickhouse-server-config.xml:/etc/clickhouse-server/config.xml
-      - ./config/users.xml:/etc/clickhouse-server/users.xml
+      - ~/deploy/config/clickhouse-server-config.xml:/etc/clickhouse-server/config.xml
+      - ~/deploy/config/users.xml:/etc/clickhouse-server/users.xml
       - clickhouse_data:/var/lib/clickhouse
     restart: always
 
