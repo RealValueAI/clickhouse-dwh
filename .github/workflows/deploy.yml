@@ -75,5 +75,6 @@ jobs:
           CLICKHOUSE_PASSWORD=${{ secrets.CLICKHOUSE_PASSWORD }}
         script: |
           cd ~/projects/clickhouse_dwh
+          docker rm -f clickhouse-server || true
           docker pull sergandri/clickhouse-storage:latest
           docker-compose -f ~/projects/clickhouse_dwh/docker-compose.yml up -d
