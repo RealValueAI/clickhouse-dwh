@@ -22,7 +22,6 @@ jobs:
         source: |
           docker-compose.yml
           config/
-          init/
         target: "/home/${{ secrets.SERVER_USER }}/clickhouse/"
         overwrite: true
 
