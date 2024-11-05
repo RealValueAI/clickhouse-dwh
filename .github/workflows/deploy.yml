@@ -29,29 +29,29 @@ jobs:
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}
+        key: ${{ secrets.SERVER_PASSWORD }}  # Используем SSH-ключ из SERVER_PASSWORD
         script: |
-          mkdir -p ~/projects/clickhouse_dwh/config
-          mkdir -p ~/projects/clickhouse_dwh/data
-          chmod -R 755 ~/projects/clickhouse_dwh
+          mkdir -p /home/sergandri/projects/clickhouse_dwh/config
+          mkdir -p /home/sergandri/projects/clickhouse_dwh/data
+          chmod -R 755 /home/sergandri/projects/clickhouse_dwh
 
     - name: Copy docker-compose.yml to server
       uses: appleboy/scp-action@v0.1.3
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}
+        key: ${{ secrets.SERVER_PASSWORD }}  # Используем SSH-ключ из SERVER_PASSWORD
         source: "docker-compose.yml"
-        target: "~/projects/clickhouse_dwh/"
+        target: "/home/sergandri/projects/clickhouse_dwh/docker-compose.yml"
 
-    - name: Copy config files to server
+    - name: Copy clickhouse-server-config.xml to server
       uses: appleboy/scp-action@v0.1.3
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PASSWORD }}
         source: "config/clickhouse-server-config.xml"
-        target: "~/projects/clickhouse_dwh/config/"
+        target: "/home/sergandri/projects/clickhouse_dwh/config/clickhouse-server-config.xml"
 
     - name: Copy users.xml to server
       uses: appleboy/scp-action@v0.1.3
@@ -60,7 +60,16 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PASSWORD }}
         source: "config/users.xml"
-        target: "~/projects/clickhouse_dwh/config/"
+        target: "/home/sergandri/projects/clickhouse_dwh/config/users.xml"
+
+    - name: Remove existing ClickHouse container (if any)
+      uses: appleboy/ssh-action@v0.1.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          docker rm -f clickhouse-server || true
 
     - name: Deploy to server
       uses: appleboy/ssh-action@v0.1.3
@@ -74,7 +83,6 @@ jobs:
           CLICKHOUSE_USER=${{ secrets.CLICKHOUSE_USER }}
           CLICKHOUSE_PASSWORD=${{ secrets.CLICKHOUSE_PASSWORD }}
         script: |
-          cd ~/projects/clickhouse_dwh
-          docker rm -f clickhouse-server || true
+          cd /home/sergandri/projects/clickhouse_dwh
           docker pull sergandri/clickhouse-storage:latest
-          docker-compose -f ~/projects/clickhouse_dwh/docker-compose.yml up -d
+          docker-compose up -d

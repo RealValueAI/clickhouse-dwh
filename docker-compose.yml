@@ -11,9 +11,9 @@ services:
       CLICKHOUSE_USER: "${CLICKHOUSE_USER:-default}"
       CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD:-password}"
     volumes:
-      - ~/projects/clickhouse_dwh/config/clickhouse-server-config.xml:/etc/clickhouse-server/config.xml
-      - ~/projects/clickhouse_dwh/config/users.xml:/etc/clickhouse-server/users.xml
-      - ~/projects/clickhouse_dwh/data:/var/lib/clickhouse
+      - /home/sergandri/projects/clickhouse_dwh/config/clickhouse-server-config.xml:/etc/clickhouse-server/config.xml
+        - /home/sergandri/projects/clickhouse_dwh/config/users.xml:/etc/clickhouse-server/users.xml
+        - /home/sergandri/projects/clickhouse_dwh/data:/var/lib/clickhouse
     restart: always
 
 volumes:
