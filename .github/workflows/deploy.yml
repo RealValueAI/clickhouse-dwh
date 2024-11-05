@@ -12,9 +12,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: List files in workspace
       run: |
+        pwd
         ls -al
         ls -al config/
         ls -al init/
@@ -25,10 +28,7 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        source: |
-          docker-compose.yml
-          config/**
-          init/**
+        source: "docker-compose.yml config/** init/**"
         target: "/home/${{ secrets.SERVER_USER }}/clickhouse/"
         overwrite: true
         debug: true
