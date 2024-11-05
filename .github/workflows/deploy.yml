@@ -35,6 +35,15 @@ jobs:
           mkdir -p ~/projects/clickhouse_dwh/data
           chmod -R 755 ~/projects/clickhouse_dwh
 
+    - name: Copy docker-compose.yml to server
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_PASSWORD }}
+        source: "docker-compose.yml"
+        target: "~/projects/clickhouse_dwh/"
+
     - name: Copy config files to server
       uses: appleboy/scp-action@v0.1.3
       with:
@@ -67,4 +76,4 @@ jobs:
         script: |
           cd ~/projects/clickhouse_dwh
           docker pull sergandri/clickhouse-storage:latest
-          docker-compose up -d
+          docker-compose -f ~/projects/clickhouse_dwh/docker-compose.yml up -d
