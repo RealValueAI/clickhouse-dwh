@@ -13,78 +13,45 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Log in to DockerHub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Build and push Docker image
-      run: |
-        docker build -t sergandri/clickhouse-storage:latest .
-        docker push sergandri/clickhouse-storage:latest
-
-    - name: Create project directory on server
+    - name: Install Docker and Docker Compose on server
       uses: appleboy/ssh-action@v0.1.3
       with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}  # Используем SSH-ключ из SERVER_PASSWORD
+        host: ${{ secrets.SERVER_HOST }}  # IP или доменное имя вашего сервера
+        username: ${{ secrets.SERVER_USER }}  # Имя пользователя для SSH-подключения
+        key: ${{ secrets.SERVER_SSH_KEY }}  # Приватный SSH-ключ для аутентификации
         script: |
-          sudo mkdir -p /home/sergandri/projects/clickhouse_dwh/config
-          sudo mkdir -p /home/sergandri/projects/clickhouse_dwh/data
+          sudo apt-get update -y
+          if ! command -v docker &> /dev/null
+          then
+            sudo apt-get install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+            sudo usermod -aG docker $USER
+          fi
+          if ! command -v docker-compose &> /dev/null
+          then
+            sudo apt-get install -y python3-pip
+            sudo pip3 install docker-compose
+          fi
 
-    - name: Copy docker-compose.yml to server
+    - name: Copy project files to server
       uses: appleboy/scp-action@v0.1.3
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}  # Используем SSH-ключ из SERVER_PASSWORD
-        source: "docker-compose.yml"
-        target: "/home/sergandri/projects/clickhouse_dwh/"
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: "."
+        target: "/home/${{ secrets.SERVER_USER }}/projects/clickhouse_dwh/"
+        recursive: true
         overwrite: true
 
-    - name: Copy clickhouse-server-config.xml to server
-      uses: appleboy/scp-action@v0.1.3
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}
-        source: "config/clickhouse-server-config.xml"
-        target: "/home/sergandri/projects/clickhouse_dwh/config/"
-        overwrite: true
-
-    - name: Copy users.xml to server
-      uses: appleboy/scp-action@v0.1.3
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}
-        source: "config/users.xml"
-        target: "/home/sergandri/projects/clickhouse_dwh/config/"
-        overwrite: true
-
-    - name: Remove existing ClickHouse container (if any)
+    - name: Deploy ClickHouse on server
       uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-          docker rm -f clickhouse-server || true
-
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v0.1.3
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_PASSWORD }}
-        envs: |
-          CLICKHOUSE_HTTP_PORT=${{ secrets.CLICKHOUSE_HTTP_PORT }}
-          CLICKHOUSE_PORT=${{ secrets.CLICKHOUSE_PORT }}
-          CLICKHOUSE_USER=${{ secrets.CLICKHOUSE_USER }}
-          CLICKHOUSE_PASSWORD=${{ secrets.CLICKHOUSE_PASSWORD }}
-        script: |
-          cd /home/sergandri/projects/clickhouse_dwh
-          docker pull sergandri/clickhouse-storage:latest
-          docker-compose up -d
+          cd /home/${{ secrets.SERVER_USER }}/projects/clickhouse_dwh
+          sudo docker-compose down || true
+          sudo docker-compose up -d

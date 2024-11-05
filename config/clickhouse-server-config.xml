@@ -1,9 +1,0 @@
-<yandex>
-    <listen_host>0.0.0.0</listen_host>
-    <path>/var/lib/clickhouse/</path>
-    <logger>
-        <level>trace</level>
-        <log>/var/log/clickhouse-server/clickhouse-server.log</log>
-        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
-    </logger>
-</yandex>

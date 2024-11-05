@@ -1,4 +1,4 @@
-<yandex>
+<clickhouse>
     <users>
         <default>
             <password></password>
@@ -9,4 +9,10 @@
             <quota>default</quota>
         </default>
     </users>
-</yandex>
+    <profiles>
+        <default/>
+    </profiles>
+    <quotas>
+        <default/>
+    </quotas>
+</clickhouse>
