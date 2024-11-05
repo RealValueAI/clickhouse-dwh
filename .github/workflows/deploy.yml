@@ -42,7 +42,6 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         source: "."
         target: "/home/${{ secrets.SERVER_USER }}/projects/clickhouse_dwh/"
-        recursive: true
         overwrite: true
 
     - name: Deploy ClickHouse on server
