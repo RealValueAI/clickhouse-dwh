@@ -12,3 +12,4 @@ tmp/
 .DS_Store
 
 clickhouse_data/
+/data/
