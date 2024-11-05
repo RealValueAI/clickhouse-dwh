@@ -13,6 +13,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: List files in workspace
+      run: |
+        ls -al
+        ls -al config/
+        ls -al init/
+
     - name: Copy project files to server
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -21,9 +27,11 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         source: |
           docker-compose.yml
-          config/
+          config/**
+          init/**
         target: "/home/${{ secrets.SERVER_USER }}/clickhouse/"
         overwrite: true
+        debug: true
 
     - name: Deploy ClickHouse on server
       uses: appleboy/ssh-action@v0.1.7
@@ -33,5 +41,5 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           cd ~/clickhouse
-          docker-compose down || true
-          docker-compose up -d
+          sudo docker-compose down || true
+          sudo docker-compose up -d
