@@ -1,5 +1,23 @@
 <clickhouse>
+    <!-- Paths to data and metadata -->
+    <path>/var/lib/clickhouse/</path>
+    <tmp_path>/var/lib/clickhouse/tmp/</tmp_path>
+    <user_files_path>/var/lib/clickhouse/user_files/</user_files_path>
+    <format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
+
+    <!-- Logger configuration -->
+    <logger>
+        <level>information</level>
+        <log>/var/log/clickhouse-server/clickhouse-server.log</log>
+        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
+    </logger>
+
+    <!-- Ports and hosts -->
     <listen_host>0.0.0.0</listen_host>
     <http_port>8123</http_port>
     <tcp_port>9000</tcp_port>
+
+    <!-- Include settings from docker-related config -->
+    <include_from>/etc/clickhouse-server/config.d/*.xml</include_from>
+    <include_from>/etc/clickhouse-server/config.d/*.conf</include_from>
 </clickhouse>
