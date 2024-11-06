@@ -26,7 +26,4 @@
     <!-- Настройки пользователей -->
     <users_config>/etc/clickhouse-server/users.xml</users_config>
 
-    <!-- Включение дополнительных конфигураций -->
-    <include_from>/etc/clickhouse-server/config.d/*.xml</include_from>
-    <include_from>/etc/clickhouse-server/config.d/*.conf</include_from>
 </clickhouse>
