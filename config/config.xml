@@ -1,23 +1,32 @@
+<?xml version="1.0"?>
 <clickhouse>
-    <!-- Paths to data and metadata -->
+    <!-- Путь к данным -->
     <path>/var/lib/clickhouse/</path>
-    <tmp_path>/var/lib/clickhouse/tmp/</tmp_path>
-    <user_files_path>/var/lib/clickhouse/user_files/</user_files_path>
-    <format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
 
-    <!-- Logger configuration -->
+    <!-- Путь к временным данным -->
+    <tmp_path>/var/lib/clickhouse/tmp/</tmp_path>
+
+    <!-- Путь к логам -->
     <logger>
         <level>information</level>
         <log>/var/log/clickhouse-server/clickhouse-server.log</log>
         <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
+        <size>1000M</size>
+        <count>10</count>
     </logger>
 
-    <!-- Ports and hosts -->
-    <listen_host>0.0.0.0</listen_host>
+    <!-- Сетевые настройки -->
     <http_port>8123</http_port>
     <tcp_port>9000</tcp_port>
 
-    <!-- Include settings from docker-related config -->
+    <!-- Настройки по умолчанию -->
+    <default_profile>default</default_profile>
+    <default_database>default</default_database>
+
+    <!-- Настройки пользователей -->
+    <users_config>/etc/clickhouse-server/users.xml</users_config>
+
+    <!-- Включение дополнительных конфигураций -->
     <include_from>/etc/clickhouse-server/config.d/*.xml</include_from>
     <include_from>/etc/clickhouse-server/config.d/*.conf</include_from>
 </clickhouse>
