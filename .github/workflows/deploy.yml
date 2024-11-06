@@ -25,7 +25,7 @@ jobs:
     - name: Rsync project files to server
       uses: burnett01/rsync-deployments@5.1
       with:
-        switches: -avzr --delete --exclude '.git'
+        switches: -avzr --delete --exclude '.git' --exclude 'data/' --exclude 'logs/'
         path: ./
         remote_path: "/home/${{ secrets.SERVER_USER }}/clickhouse/"
         remote_host: ${{ secrets.SERVER_HOST }}
