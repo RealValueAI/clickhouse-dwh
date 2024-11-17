@@ -3,7 +3,7 @@
     <users>
         <!-- Пользователь по умолчанию -->
         <default>
-            <password></password>
+            <password>${CLICKHOUSE_PASSWORD}</password>
             <networks>
                 <ip>::/0</ip>
             </networks>
@@ -11,14 +11,30 @@
             <quota>default</quota>
             <access_management>1</access_management>
         </default>
+
+        <!-- Новый пользователь для микросервиса domparser -->
+        <ms_user>
+            <password>${CLICKHOUSE_MS_PASSWORD}</password> <!-- Установите безопасный пароль -->
+            <networks>
+                <ip>::/0</ip> <!-- Разрешить доступ с любых IP. Вы можете ограничить доступ к конкретному IP-диапазону -->
+            </networks>
+            <profile>ms_profile</profile> <!-- Использовать созданный ниже профиль -->
+            <quota>default</quota> <!-- Ограничения по квоте, при необходимости можно создать отдельную квоту -->
+        </ms_user>
     </users>
 
     <profiles>
         <default>
-            <!-- Настройки профиля по умолчанию -->
             <max_memory_usage>10000000000</max_memory_usage>
             <use_uncompressed_cache>1</use_uncompressed_cache>
         </default>
+
+        <ms_profile>
+            <max_memory_usage>4000000000</max_memory_usage>
+            <use_uncompressed_cache>1</use_uncompressed_cache>
+            <max_concurrent_queries>2</max_concurrent_queries>
+            <allow_ddl>1</allow_ddl>
+        </ms_profile>
     </profiles>
 
     <quotas>

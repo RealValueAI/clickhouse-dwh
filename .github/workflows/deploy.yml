@@ -38,6 +38,9 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
+        envs:
+          CLICKHOUSE_PASSWORD: ${{ secrets.CLICKHOUSE_PASSWORD }}
+          CLICKHOUSE_MS_PASSWORD: ${{ secrets.CLICKHOUSE_MS_PASSWORD }}
         script: |
           cd ~/clickhouse
           sudo docker-compose down || true
