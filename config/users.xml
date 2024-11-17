@@ -32,7 +32,6 @@
         <ms_profile>
             <max_memory_usage>4000000000</max_memory_usage>
             <use_uncompressed_cache>1</use_uncompressed_cache>
-            <max_concurrent_queries>2</max_concurrent_queries>
             <allow_ddl>1</allow_ddl>
         </ms_profile>
     </profiles>
