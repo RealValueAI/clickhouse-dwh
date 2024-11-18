@@ -3,7 +3,7 @@
     <users>
         <!-- Пользователь по умолчанию -->
         <default>
-            <password>${CLICKHOUSE_PASSWORD}</password>
+            <password>default</password>
             <networks>
                 <ip>::/0</ip>
             </networks>
