@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS dwh.platforms;
 CREATE TABLE IF NOT EXISTS dwh.platforms (
     platform_id UInt32,          -- Уникальный идентификатор платформы
     platform_name String,        -- Название платформы (DomClick, Avito, Cian, Yandex Realty)

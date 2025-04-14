@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS dwh.listings_actual;
 CREATE TABLE IF NOT EXISTS dwh.listings_actual (
     listing_id UInt64,
     listing_url String,
