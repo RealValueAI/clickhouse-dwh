@@ -1,6 +1,4 @@
 CREATE DATABASE IF NOT EXISTS dwh;
-
-DROP TABLE dwh.listings;
 CREATE TABLE IF NOT EXISTS dwh.listings (
     uid UUID,                      -- Уникальный идентификатор записи, отличный от listing_id
     listing_id Int64,              -- Уникальный идентификатор объявления платформы (Object ID)

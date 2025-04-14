@@ -13,3 +13,4 @@ tmp/
 
 clickhouse_data/
 /data/
+/logs/
