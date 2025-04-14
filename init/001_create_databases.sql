@@ -1,18 +1,44 @@
 CREATE DATABASE IF NOT EXISTS dwh;
 
+DROP TABLE dwh.listings;
 CREATE TABLE IF NOT EXISTS dwh.listings (
-    listing_id UInt64,                -- Уникальный идентификатор объявления
-    platform_id UInt32,               -- Идентификатор платформы, на которой размещено объявление
-    listing_url String,               -- URL объявления
-    photo_urls Array(String),         -- Массив ссылок на фотографии
-    price Float64,                    -- Стоимость объекта недвижимости
-    property_type_id UInt32,          -- Идентификатор Типа недвижимости (квартира, дом и т.д.)
-    area Float32,                     -- Площадь недвижимости в квадратных метрах
-    rooms UInt8,                      -- Количество комнат
-    bathrooms UInt8,                  -- Количество ванных комнат
-    address String,                  -- адрес недвижимости
-    description String,               -- Описание недвижимости
-    created_at DateTime DEFAULT now() -- Время создания записи (временная метка)
+    uid UUID,                      -- Уникальный идентификатор записи, отличный от listing_id
+    listing_id Int64,              -- Уникальный идентификатор объявления платформы (Object ID)
+    platform_id Int32,             -- Идентификатор платформы, на которой размещено объявление (DomClick, Avito и т.д.)
+    listing_url String,            -- URL объявления
+    price Float64,                 -- Стоимость объекта недвижимости (Price)
+    price_per_sqm Float64,         -- Цена за квадратный метр (Price per sqm)
+    mortgage_rate Float32,         -- Ставка ипотеки (Mortgage Rate)
+    address String,                -- Адрес недвижимости (Address)
+    address_id Int64,              -- Идентификатор адреса (Address ID)
+    area Float32,                  -- Площадь недвижимости в квадратных метрах (Area)
+    rooms Nullable(Int32),         -- Количество комнат (Rooms)
+    floor Nullable(Int32),         -- Этаж недвижимости (Floor)
+    description String,            -- Описание недвижимости (Description)
+    published_date Datetime,       -- Дата публикации (Published Date)
+    updated_date Datetime,         -- Дата обновления (Updated Date)
+    seller_id Nullable(Int64),     -- Идентификатор продавца (Seller ID)
+    seller_name_hash String,       -- Хэш имени продавца (Seller Name Hash)
+    company_name String,           -- Название компании (Company Name)
+    company_id Nullable(Int64),    -- Идентификатор компании (Company ID)
+    property_type String,          -- Тип недвижимости (Property Type)
+    category String,               -- Категория недвижимости (Category)
+    house_floors Nullable(Int32),  -- Количество этажей в доме (House Floors)
+    deal_type String,              -- Тип сделки (Deal Type)
+    discount_status String,        -- Статус скидки (Discount Status)
+    discount_value Float32,        -- Значение скидки (Discount Value)
+    placement_paid Int8,           -- Платное размещение (Placement Paid)
+    big_card Int8,                 -- Флаг большого карточного размещения (Big Card)
+    pin_color Bool,                -- Цветной пин (Pin Color)
+    longitude Float64,             -- Долгота объекта (Longitude)
+    latitude Float64,              -- Широта объекта (Latitude)
+    subway_distances Array(Float32), -- Расстояния до ближайших станций метро (Subway Distances)
+    subway_names Array(String),    -- Названия станций метро (Subway Names)
+    photo_urls Array(String),      -- Массив ссылок на фотографии (Photos URLs)
+    monthly_payment Float64,       -- Ежемесячный платеж (Monthly Payment)
+    advance_payment Float64,       -- Авансовый платеж (Advance Payment)
+    auction_status Bool,           -- Аукцион (Auction Status)
+    created_at DateTime DEFAULT now() -- Время создания записи в сервисе ETL(временная метка)
 )
 ENGINE = MergeTree()
 ORDER BY listing_id;
